@@ -1,0 +1,9 @@
+#include "string.h"
+#include <stdlib.h>
+
+Train_str tn_str(char str[]){
+	Train_str *temp = (Train_str*)malloc(sizeof(Train_str));
+	temp->item = str;
+	
+}
+
