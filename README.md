@@ -1,5 +1,5 @@
 # About the Train library
-This is a self made,Nob inspired library: [Nob github](www.github.com/tsoding/nob.h),this library will not only contain string manipulation: THIS IS A EARLY STAGE LIBRARY,NOTHING IS FINISHED NEIHTER POLISHED! [Train repo](www.github.com/nykbocks/train)
+This is a self made,Nob inspired library: [Nob github](www.github.com/tsoding/nob.h),this library will not only contain string manipulation: THIS IS A EARLY STAGE LIBRARY,NOTHING IS FINISHED NEIHTER POLISHED!
 ## String Functions
 | Function     | Description                                                                   | Usage                                                                 |
 |--------------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------|
