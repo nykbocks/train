@@ -1,10 +1,17 @@
 #include "string.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(){
-	Train_str *test = tn_str("HW! ");
-	tn_ins(test,1,"ello ");
-	tn_ins(test,7,"orld");
-	printf("%s",test->item);
+    	Train_str *test = tn_str("apluh");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	tn_ins(test,5,"plo");
+    	printf("%s",test->item);
 	return 0;
 }
