@@ -4,14 +4,7 @@
 
 int main(){
     	Train_str *test = tn_str("apluh");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	tn_ins(test,5,"plo");
-    	printf("%s",test->item);
+    	if(tn_cmp("apluh","apluh")) printf("They are equal!\n");
+    	//printf("%s",test->item);
 	return 0;
 }

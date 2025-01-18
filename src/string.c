@@ -1,4 +1,4 @@
-#include "string.h"
+#include "../string.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -8,6 +8,7 @@
 #define MAX_STR 65536
 #define SNULL 0
 char RET_SPF[MAX_STR] = {0};
+int RET_SIZ = 0;
 Train_str *tn_str(char *str){
 	Train_str *temp = (Train_str*)malloc(sizeof(Train_str));
 	temp->item = (char*)malloc(sizeof(char) * tn_size(str));
@@ -15,6 +16,7 @@ Train_str *tn_str(char *str){
 		temp->item[i] = str[i];
 	}
 	temp->size = tn_size(temp->item);
+	temp->item[tn_size(str)] = '\0';
 	return temp;
 }
 Train_str *tn_cr_empty(int size){
@@ -32,21 +34,21 @@ int tn_size(char *str){
 	return str_size; 
 }
 char *tn_ret_print(const char *format,...){
-	memset(RET_SPF,tn_size(RET_SPF),0);
-	va_list args;
+        va_list args;
 	va_start(args,format);
-	//char *ret = (char*)malloc(sizeof(char) * MAX_STR);	
-	vsprintf(RET_SPF,format,args);
+	char *ret = (char*)malloc(sizeof(char) * MAX_STR);	
+	vsprintf(ret,format,args);
 	va_end(args);
-	return RET_SPF;
+	return ret;
 }
 void tn_ret_prints(Train_str *str,const char *format,...){
 	va_list args;
 	va_start(args,format);
-	char *ret = (char*)malloc(sizeof(char) * str->size);	
+	char *ret = (char*)malloc(sizeof(char) * str->size);
+	//char ret[1024];
 	vsprintf(ret,format,args);
-	strcat(str->item,ret);
 	va_end(args);
+	strcat(str->item,ret);
 }
 void tn_ins_s(Train_str *str,int index,char *ins){
 	//char p1[index + len];
@@ -86,7 +88,7 @@ void tn_ins_s(Train_str *str,int index,char *ins){
 	free(p2);
 	return;
 }
-void tn_ins_c(Train_str *str,int index,int ins){
+void tn_ins_c(Train_str *strc,int index,int ins){
     /*
 	if(index == tn_size(str->item)){
     		tn_apnd_c(str,ins);
@@ -131,6 +133,7 @@ void tn_ins_c(Train_str *str,int index,int ins){
 *//*   	char *final = (char*)malloc(sizeof(char) * (strlen(str->item) + sizeof(ins) + 5));
    	memset(final,0,(strlen(str->item) + sizeof(ins) + 5));
 */   
+	Train_str *str = tn_str(strc->item);
 	char final[strlen(str->item) + sizeof(ins) + 5];	
 	memset(final,0,strlen(str->item) + sizeof(ins) + 5);
 	strncpy(final,str->item,index);
@@ -157,7 +160,7 @@ void tn_del(Train_str *str,int index){
 	str->size = tn_size(str->item);
 //	free(p1);
 }
-int tn_cmp(char *a,char *b)
+int tn_cmp_s(char *a,char *b)
 {
 	int max = (tn_size(a) > tn_size(b)) ? tn_size(b) : tn_size(a);
 	int i = 0;
@@ -167,22 +170,75 @@ int tn_cmp(char *a,char *b)
 	}
 	return 1;
 }
+int tn_cmp_cm(char a,char b[])
+{
+	int i = 0;
+	while(i<=tn_size(b)){
+		if(a == b[i]){i++;continue;};
+		return 0;
+	}
+	return 1;
+}
+int tn_cmp_sm(char *a,char *b[],int s)
+{
+    	for (int i = 0;i<=s;i++){
+        	int max = (tn_size(a) > tn_size(b[i])) ? tn_size(b[i]) : tn_size(a);
+        	int j = 0;
+        	while(j<=max){
+        		if(a[j] == b[i][j]){j++;continue;};
+        		return 0;
+        	}
+    	}
+	return 1;
+}
+int tn_cmp_c(char a,char b)
+{
+	if(a == b){return 1;};
+	return 0;
+}
 int tn_apnd_s(Train_str *str,char *ins){
+    	//free(str->item);
        	str->item = tn_ret_print("%s%s",str->item,ins);
 	str->size = tn_size(str->item);
 	if(str->size > 0) return 0;
 	return 1;
 }
 int tn_apnd_c(Train_str *str,char ins){
-       	str->item = tn_ret_print("%s%c",str->item,ins);
+    	free(str->item);
+       	str->item = tn_ret_print("%s%c%c",str->item,ins,'\0');
 	str->size = tn_size(str->item);
 	if(str->size > 0) return 0;
 	return 1;
 }
 char *tn_get_uc(char *str,int index,char stop_c){
+	// Train_str *str = tn_str(strc->item);
 	Train_str *out = tn_cr_empty(tn_size(str));	
 	for(int i = index;str[i-1] != stop_c;i++){
+    		if(i == tn_size(str)) {printf("TN_GET_UC ERROR:The specified charachter is not on the string.\n"); break;}
 		tn_ret_prints(out,"%c",str[i]);
 	}
 	return out->item;
+}
+void tn_clear(Train_str *str){
+  char ret[1024];
+	//memset(str->item,0,tn_size(str->item));
+	str->size = 0;
+	str->item = tn_ret_print("%c",'\0');
+}
+int tn_check_fn(Train_str *str){
+	for(int i = 0;i < str->size;i++){
+    		int c = (int)str->item[i];
+		if('0' < c && c < '9'){
+			continue;
+		}
+		return 0;
+	}
+	return 1;
+}
+int tn_check_fn_c(char str){
+	int c = (int)str;
+	if('0' <= c && c <= '9'){
+    		return 1;
+	}
+	return 0;
 }
