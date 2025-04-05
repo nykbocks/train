@@ -179,17 +179,14 @@ int tn_cmp_cm(char a,char b[])
 	}
 	return 1;
 }
-int tn_cmp_sm(char *a,char *b[],int s)
+int tn_cmp_sm(char *a,char **b,int s)
 {
-    	for (int i = 0;i<=s;i++){
-        	int max = (tn_size(a) > tn_size(b[i])) ? tn_size(b[i]) : tn_size(a);
-        	int j = 0;
-        	while(j<=max){
-        		if(a[j] == b[i][j]){j++;continue;};
-        		return 0;
+    	for (int i = 0;i<s;i++){
+        	if(tn_cmp_s(a,b[i])){
+			return i;
         	}
     	}
-	return 1;
+	return -1;
 }
 int tn_cmp_c(char a,char b)
 {
@@ -204,7 +201,7 @@ int tn_apnd_s(Train_str *str,char *ins){
 	return 1;
 }
 int tn_apnd_c(Train_str *str,char ins){
-    	free(str->item);
+    	//free(str->item);
        	str->item = tn_ret_print("%s%c%c",str->item,ins,'\0');
 	str->size = tn_size(str->item);
 	if(str->size > 0) return 0;
@@ -219,8 +216,16 @@ char *tn_get_uc(char *str,int index,char stop_c){
 	}
 	return out->item;
 }
+char *tn_get_ucr(char *str,int index,char stop_c){
+	// Train_str *str = tn_str(strc->item);
+	Train_str *out = tn_cr_empty(tn_size(str));	
+	for(int i = index;str[i-1] != stop_c;i--){
+    		if(i == tn_size(str)) {printf("TN_GET_UC ERROR:The specified charachter is not on the string.\n"); break;}
+		tn_ret_prints(out,"%c",str[i]);
+	}
+	return out->item;
+}
 void tn_clear(Train_str *str){
-  char ret[1024];
 	//memset(str->item,0,tn_size(str->item));
 	str->size = 0;
 	str->item = tn_ret_print("%c",'\0');
@@ -241,4 +246,26 @@ int tn_check_fn_c(char str){
     		return 1;
 	}
 	return 0;
+}
+int tn_check_fl_c(char ch) // check for letter
+{
+    	int c = (int)ch;
+	if('A' <= c && c <= 'Z' || 'a' <= c && c <= 'z'){
+		return 1;
+	}
+	return 0;
+}
+void tn_move(Train_str *src,Train_str *dst){
+	tn_clear(src);
+	tn_apnd_s(src,dst->item);
+	tn_clear(dst);
+}
+void tn_inv_s(Train_str *str){
+	Train_str *tmp = tn_cr_empty(str->size);
+	for (int i = str->size+1;i >= 0;i--){
+		tn_apnd_c(tmp,str->item[i]);
+		printf("TMP %s\n",tmp->item);
+	}
+	str = tmp;
+	free(tmp);
 }
