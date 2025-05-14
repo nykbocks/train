@@ -2,6 +2,10 @@
 #include <stddef.h>
 #ifndef _TRAIN_STRING_
 #define _TRAIN_STRING_
+#define MAX_STR 65536
+#define SNULL 0
+char RET_SPF[MAX_STR] = {0};
+int RET_SIZ = 0;
 typedef struct {
 	char *item;
 	int size;
